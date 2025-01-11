@@ -4,6 +4,9 @@
     let currentY = $state(0);
     let updatedY = $derived(currentY - startY);
     let container;
+    
+    let props = $props();
+    let content = props.content ?? "There is where you put your content."
 
     // Set default reference value
     const handleTouchStart = (event) => {
@@ -22,17 +25,20 @@
             container.style.height = - updatedY >= innerHeight ? "100vh"  : - updatedY + "px";
         }
     };
-    
-    const handleTouchEnd = () => {
+
+    const handleTouchEnd = (e) => {
+        e.preventDefault() 
         if (currentY > (innerHeight / 2)) {
             collapse();
-        } else if (currentY < (innerHeight / 2)) {
-            open();
         } else {
-            isCollapsed ? open() : collapse();
+            open();
         }
     };
     
+    const handleMouseDown = (e) => {
+        isCollapsed ? open() : collapse();
+    }
+        
     const collapse = () => {
         container.style.height = "5vh";
         isCollapsed = true;
@@ -42,8 +48,6 @@
         container.style.height = "100vh";
         isCollapsed = false;
     };
-    
-    
 </script>
 
 <style>
@@ -59,7 +63,7 @@
         color: black;
         border-radius: 10px 10px 0 0;
     }
-    .content {
+    .content-container {
          display: grid;
          place-items: center;
          padding-block: 1em;
@@ -69,16 +73,23 @@
         height: 2px;
         background: gray;
     }
+    .content {
+        padding: 1em;
+    }
 </style>
 
 <div
     bind:this={container}
     class="container"
-    on:touchstart={handleTouchStart}
-    on:touchmove={handleTouchMove}
-    on:touchend={handleTouchEnd}
+    ontouchstart={handleTouchStart}
+    ontouchmove={handleTouchMove}
+    ontouchend={handleTouchEnd}
+    onmousedown={handleMouseDown}
 >
-    <div class="content">
+    <div class="content-container">
         <div class="hr_line"></div>
+        <section class="content">
+            {content}
+        </section>
     </div>
 </div>

@@ -13,7 +13,7 @@
   <p class="welcome-msg">
     Click on the planet to visit my website for other stuff :)
   </p>
-  <Panel />
+  <Panel/>
 </main>
 
 <style>
